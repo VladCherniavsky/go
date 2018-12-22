@@ -1,0 +1,43 @@
+{
+  "extends": [
+    "eslint:recommended",
+    "google",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:react/recommended"
+  ],
+  "plugins": [
+    "react",
+    "import",
+    "react-native"
+  ],
+  "globals": {
+    "__DEV__": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "env": {
+    "es6": true,
+    "node": true,
+    "mocha": true,
+    "jest": true
+  },
+  "parser": "babel-eslint",
+  "rules": {
+    "comma-dangle": "off",
+    "require-jsdoc": 0,
+    "no-invalid-this": 0,
+    "import/no-named-as-default": 0,
+    "max-len": ["error", 100, {
+      "ignoreComments": true,
+      "ignoreTemplateLiterals": true,
+      "ignoreTrailingComments": true,
+      "ignoreUrls": true
+    }]
+  }
+}
