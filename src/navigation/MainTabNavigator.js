@@ -7,54 +7,69 @@ import HomeScreen from '../containers/HomeScreen';
 import LinksScreen from '../containers/LinksScreen';
 import SettingsScreen from '../containers/SettingsScreen';
 
-const HomeStack = createStackNavigator({
+const SearchStack = createStackNavigator({
   Home: HomeScreen,
 });
 
-HomeStack.navigationOptions = {
-  tabBarLabel: 'Home',
+SearchStack.navigationOptions = {
+  tabBarLabel: 'Search',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
       name={
         Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
+          ? 'ios-search'
+          : 'md-search'
       }
     />
   ),
 };
 
-const LinksStack = createStackNavigator({
+const NewRideStack = createStackNavigator({
   Links: LinksScreen,
 });
 
-LinksStack.navigationOptions = {
-  tabBarLabel: 'Links',
+NewRideStack.navigationOptions = {
+  tabBarLabel: 'Add Ride',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
+      name={Platform.OS === 'ios' ? 'ios-add' : 'md-add'}
     />
   ),
 };
 
-const SettingsStack = createStackNavigator({
+const HistoryStack = createStackNavigator({
   Settings: SettingsScreen,
 });
 
-SettingsStack.navigationOptions = {
-  tabBarLabel: 'Settings',
+HistoryStack.navigationOptions = {
+  tabBarLabel: 'History',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
+      name={Platform.OS === 'ios' ? 'logo-buffer' : 'logo-buffer'}
+    />
+  ),
+};
+
+const ProfileStack = createStackNavigator({
+  Settings: SettingsScreen,
+});
+
+ProfileStack.navigationOptions = {
+  tabBarLabel: 'Profile',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={Platform.OS === 'ios' ? 'ios-person' : 'md-person'}
     />
   ),
 };
 
 export default createBottomTabNavigator({
-  HomeStack,
-  LinksStack,
-  SettingsStack,
+  SearchStack,
+  NewRideStack,
+  HistoryStack,
+  ProfileStack
 });
