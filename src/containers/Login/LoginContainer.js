@@ -2,21 +2,23 @@ import React from 'react';
 import {
   View,
   Text,
-  Button,
-  Alert,
-  Image,
-  ActivityIndicator
 } from 'react-native';
 import {Linking, WebBrowser} from 'expo';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {userFetchActionCreator} from '../../actions/actionCreators/userActionCreators';
+import ButtonCustom from '../../components/Button/Button';
+import {Ionicons} from '@expo/vector-icons';
+import styles from './styles';
 
-export default class LinksScreen extends React.Component {
+class LoginContainer extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
       user: {},
       showSpinner: false,
-      url_request: 'http://35.195.178.113/auth/vkontakte'
+      url_request: 'http://10.0.75.1:3000/auth/vkontakte'
     };
   }
 
@@ -36,7 +38,6 @@ export default class LinksScreen extends React.Component {
     } catch (err) {
       console.log('ERROR:', err);
     }
-
   };
 
   parseUrlToUser = (url) => {
@@ -51,21 +52,38 @@ export default class LinksScreen extends React.Component {
     }, () => {
       WebBrowser.dismissBrowser();
       const {navigate} = this.props.navigation;
-      navigate('Main')
+      navigate('Main');
     });
   };
 
+  renderVkLabelAndIcon = () => (
+    <View style={{flexDirection: 'row', flex: 1}}>
+      <Text style={styles.buttonLabel}>Login with </Text>
+      <Ionicons name={'logo-vk'} style={styles.buttonIcon} />
+    </View>
+  );
+
   render() {
     return (
-      <View>
-        <Text>Login Container</Text>
-        <Button title="Login with VK" onPress={this.handleGitHubLogin} />
-        <Text>Name: {this.state.user.displayName}</Text>
-        <Image source={this.state.user.photos ? {uri: this.state.user.photos[2].value} : {}}
-               style={{width: 300, height: 300}}/>
-        <Text>authUrl: {this.state.authUrl}</Text>
-        <ActivityIndicator size={100} color="#0000ff"  animating={this.state.showSpinner}/>
+      <View style={styles.loginContainer}>
+        <ButtonCustom
+          onPressHandler={this.handleGitHubLogin}
+          style={{backgroundColor: '#5b88bd', alignItems: 'center', width: '80%', height: '8%'}}
+          render={this.renderVkLabelAndIcon} />
       </View>
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+  };
+};
+
+const mapActionsToProps = (dispatch) => (
+  bindActionCreators({
+    fetchUserData: userFetchActionCreator
+  }, dispatch)
+);
+
+export default connect(mapStateToProps, mapActionsToProps)(LoginContainer);
