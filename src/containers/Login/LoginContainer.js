@@ -3,6 +3,7 @@ import {
   View,
   Text,
 } from 'react-native';
+import PropTypes from 'prop-types';
 import {Linking, WebBrowser} from 'expo';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
@@ -30,21 +31,18 @@ class LoginContainer extends React.Component {
       showSpinner: true
     });
 
-    console.log('this', this.props);
-
     try {
       const authResult = await WebBrowser.openAuthSessionAsync(authUrl, redirectUrl);
       this.parseUrlToUser(authResult.url);
     } catch (err) {
+      // eslint-disable-next-line
       console.log('ERROR:', err);
     }
   };
 
   parseUrlToUser = (url) => {
-    const [, user_string] = url.match(/user=([^#]+)/);
-    const decodedUser = JSON.parse(decodeURI(user_string));
-
-    console.log('decodedUser', decodedUser);
+    const [, userString] = url.match(/user=([^#]+)/);
+    const decodedUser = JSON.parse(decodeURI(userString));
 
     this.setState({
       user: decodedUser,
@@ -85,5 +83,11 @@ const mapActionsToProps = (dispatch) => (
     fetchUserData: userFetchActionCreator
   }, dispatch)
 );
+
+LoginContainer.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func
+  })
+};
 
 export default connect(mapStateToProps, mapActionsToProps)(LoginContainer);

@@ -5,23 +5,26 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "eject": "expo eject",
-    "test": "node ./node_modules/jest/bin/jest.js --watchAll"
+    "test": "node ./node_modules/jest/bin/jest.js --watchAll",
+    "lint": "eslint --fix ./src"
   },
   "jest": {
     "preset": "jest-expo"
   },
   "dependencies": {
     "@expo/samples": "2.1.1",
+    "axios": "^0.18.0",
     "babel-eslint": "^10.0.1",
     "eslint": "^5.10.0",
     "eslint-config-google": "^0.11.0",
     "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-react": "^7.12.2",
     "eslint-plugin-react-native": "^3.5.0",
-    "expo": "^31.0.2",
+    "expo": "^32.0.0",
+    "expo-background-fetch": "^1.0.0",
     "react": "16.5.0",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-31.0.0.tar.gz",
-    "react-navigation": "^2.18.2",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
+    "react-native-calendars": "^1.21.0",
+    "react-navigation": "^3.0.9",
     "react-redux": "^6.0.0",
     "redux": "^4.0.1",
     "redux-immutable-state-invariant": "^2.1.0",
@@ -29,7 +32,9 @@
   },
   "devDependencies": {
     "babel-preset-expo": "^5.0.0",
-    "jest-expo": "^31.0.0",
+    "eslint-plugin-react": "^7.12.3",
+    "jest-expo": "^32.0.0",
+    "prop-types": "^15.6.2",
     "redux-devtools-extension": "^2.13.7"
   },
   "private": true
