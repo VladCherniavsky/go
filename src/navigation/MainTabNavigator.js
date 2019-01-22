@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 
 import TabBarIcon from '../components/TabBarIcon';
 import SearchContainer from '../containers/Search';
+import NewRideContainer from '../containers/NewRide';
 import LinksScreen from '../containers/LinksScreen';
 import SettingsScreen from '../containers/SettingsScreen';
 
@@ -33,13 +34,8 @@ renderSearchStackTabBarIcon.propTypes = {
 };
 
 const NewRideStack = createStackNavigator({
-  Links: LinksScreen,
+  NewRide: NewRideContainer,
 });
-
-NewRideStack.navigationOptions = {
-  tabBarLabel: 'Add Ride',
-  tabBarIcon: renderNewRideTabBarIcon
-};
 
 const renderNewRideTabBarIcon = ({focused}) => (
   <TabBarIcon
@@ -47,6 +43,11 @@ const renderNewRideTabBarIcon = ({focused}) => (
     name={Platform.OS === 'ios' ? 'ios-add' : 'md-add'}
   />
 );
+
+NewRideStack.navigationOptions = {
+  tabBarLabel: 'Add Ride',
+  tabBarIcon: renderNewRideTabBarIcon
+};
 
 renderNewRideTabBarIcon.propTypes = {
   focused: PropTypes.bool
@@ -56,17 +57,18 @@ const HistoryStack = createStackNavigator({
   Settings: SettingsScreen,
 });
 
-HistoryStack.navigationOptions = {
-  tabBarLabel: 'History',
-  tabBarIcon: renderHistoryTabBarIcon
-};
-
 const renderHistoryTabBarIcon = ({focused}) => (
   <TabBarIcon
     focused={focused}
     name={Platform.OS === 'ios' ? 'logo-buffer' : 'logo-buffer'}
   />
 );
+
+HistoryStack.navigationOptions = {
+  tabBarLabel: 'History',
+  tabBarIcon: renderHistoryTabBarIcon
+};
+
 
 renderHistoryTabBarIcon.propTypes = {
   focused: PropTypes.bool

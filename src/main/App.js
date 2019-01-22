@@ -1,16 +1,22 @@
 import React from 'react';
 import {Platform, StatusBar, StyleSheet, View} from 'react-native';
-import {AppLoading, Asset, Font, Icon} from 'expo';
-import AppNavigator from './src/navigation/AppNavigator';
+import {AppLoading, Asset, Font, Icon, registerRootComponent} from 'expo';
+import AppNavigator from '../navigation/AppNavigator';
 import {Provider} from 'react-redux';
-import createStore from './src/store';
+import createStore from '../store/index';
 
-export default class App extends React.Component {
+class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isLoadingComplete: false,
     };
+  }
+  componentDidMount() {
+    this._loadResourcesAsync()
+        .then(this._handleFinishLoading);
+
+    console.log('this', this);
   }
 
   store = createStore();
@@ -18,11 +24,7 @@ export default class App extends React.Component {
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
-        <AppLoading
-          startAsync={this._loadResourcesAsync}
-          onError={this._handleLoadingError}
-          onFinish={this._handleFinishLoading}
-        />
+        <View style={{flex: 1, backgroundColor: 'green'}}></View>
       );
     } else {
       return (
@@ -40,15 +42,15 @@ export default class App extends React.Component {
   _loadResourcesAsync = async () => {
     return Promise.all([
       Asset.loadAsync([
-        require('./assets/images/robot-dev.png'),
-        require('./assets/images/robot-prod.png'),
+        require('../../assets/images/robot-dev.png'),
+        require('../../assets/images/robot-prod.png'),
       ]),
       Font.loadAsync({
         // This is the font that we are using for our tab bar
         ...Icon.Ionicons.font,
         // We include SpaceMono because we use it in HomeScreen.js. Feel free
         // to remove this if you are not using it in your app
-        'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
+        'space-mono': require('../../assets/fonts/SpaceMono-Regular.ttf'),
       }),
     ]);
   };
@@ -74,3 +76,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.2)',
   }
 });
+
+registerRootComponent(App);
+
+export default App;
