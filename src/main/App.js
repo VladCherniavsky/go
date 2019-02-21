@@ -1,9 +1,17 @@
+/* eslint-disable no-undef */
 import React from 'react';
-import {Platform, StatusBar, StyleSheet, View} from 'react-native';
-import {AppLoading, Asset, Font, Icon, registerRootComponent} from 'expo';
+import {Platform, StatusBar, StyleSheet, View, AppState} from 'react-native';
+import {Asset, Font, Icon, registerRootComponent} from 'expo';
 import AppNavigator from '../navigation/AppNavigator';
 import {Provider} from 'react-redux';
-import createStore from '../store/index';
+import {PersistGate} from 'redux-persist/lib/integration/react';
+import StoreSingletone from '../store';
+import sagas from '../sagas';
+
+// eslint-disable-next-line
+XMLHttpRequest = GLOBAL.originalXMLHttpRequest ?
+  GLOBAL.originalXMLHttpRequest :
+  GLOBAL.XMLHttpRequest;
 
 class App extends React.Component {
   constructor(props) {
@@ -11,29 +19,34 @@ class App extends React.Component {
     this.state = {
       isLoadingComplete: false,
     };
+    const storeAndPersistor = new StoreSingletone();
+    this.store = storeAndPersistor.store;
+    this.persistor = storeAndPersistor.persistor;
+    this.store.runSaga(sagas);
   }
   componentDidMount() {
     this._loadResourcesAsync()
         .then(this._handleFinishLoading);
-
-    console.log('this', this);
   }
 
-  store = createStore();
+  renderSplash = () => (<View style={{flex: 1, backgroundColor: 'red'}}></View>)
+
 
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
-        <View style={{flex: 1, backgroundColor: 'green'}}></View>
+        this.renderSplash()
       );
     } else {
       return (
         <Provider store={this.store}>
-          <View style={styles.container}>
-            {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-            {Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />}
-            <AppNavigator />
-          </View>
+          <PersistGate loading={this.renderSplash()} persistor={this.persistor}>
+            <View style={styles.container}>
+              {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+              {Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />}
+              <AppNavigator />
+            </View>
+          </PersistGate>
         </Provider>
       );
     }

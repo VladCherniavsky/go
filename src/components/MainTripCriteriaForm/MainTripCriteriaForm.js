@@ -2,6 +2,7 @@ import React from 'react';
 import {View, ListView, TouchableOpacity, Text, TextInput} from 'react-native';
 import {CalendarList} from 'react-native-calendars';
 import {debounce} from 'lodash';
+import DateTimePicker from 'react-native-modal-datetime-picker';
 import InputWithLabel from '../InputWithLabel';
 import ModalScreen from '../Modal';
 import ModalHeader from '../Modal/ModalHeader';
@@ -20,7 +21,9 @@ class MainTripCriteriaForm extends React.Component {
     this.state = {
       activeInputElement: 'From',
       placesPredictions: this.ds.cloneWithRows([]),
-      selectedDate: null
+      selectedDate: null,
+      isTimePickerVisible: false,
+      selectedTime: null
     };
   }
 
@@ -51,18 +54,20 @@ class MainTripCriteriaForm extends React.Component {
 
   renderCalendar = () => (
     <CalendarList
-      onDayPress={(day) => {
-        const dates = {
-          selectedDate: day.dateString,
-          formattedDate: (new Date(day.dateString)).toDateString()
-        };
-        this.props.onSelectDate(dates);
-        this.modalScreenRef.current.close();
-      }}
+      onDayPress={this.handleDayPress}
       markedDates={{
         [this.state.selectedDate]: {selected: true, marked: true, selectedColor: 'blue'}
       }}
     />);
+
+  handleDayPress = (day) => {
+    const dates = {
+      selectedDate: day.dateString,
+      formattedDate: (new Date(day.dateString)).toDateString()
+    };
+    this.props.onSelectDate(dates);
+    this.modalScreenRef.current.close();
+  };
 
   renderSearchView = () => (
     <ListView
@@ -155,6 +160,15 @@ class MainTripCriteriaForm extends React.Component {
     );
   };
 
+  renderTimePicker = (shouldRenderTimePicker) => {
+    return shouldRenderTimePicker
+      ? <DateTimePicker
+        onConfirm={this.props.onSelectTime}
+        isVisible={this.props.showTimePicker}
+        mode={'time'}/>
+      : null;
+  };
+
 
   render() {
     const {departurePlace, arrivalPlace} = this.props;
@@ -198,6 +212,9 @@ class MainTripCriteriaForm extends React.Component {
           renderContent={this.renderContent}
           modalVisible={this.state.modalWindowVisible}
           ref={this.modalScreenRef}/>
+
+        {this.renderTimePicker(this.props.showTimePicker)}
+
       </View>
 
     );

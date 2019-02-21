@@ -3,8 +3,7 @@ import {USER_FETCH, USER_FETCH_SUCCESS, USER_FETCH_FAIL} from '../actions';
 const initialState = {
   isLoading: false,
   error: null,
-  data: null,
-  sukas: 'dddd'
+  data: null
 };
 
 export default (state = initialState, action) => {

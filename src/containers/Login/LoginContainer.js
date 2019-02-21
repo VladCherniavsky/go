@@ -7,56 +7,52 @@ import PropTypes from 'prop-types';
 import {Linking, WebBrowser} from 'expo';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {userFetchActionCreator} from '../../actions/actionCreators/userActionCreators';
-import ButtonCustom from '../../components/Button/Button';
+import Button from '../../components/Button';
 import {Ionicons} from '@expo/vector-icons';
 import styles from './styles';
+import {authCheckActionCreator} from '../../actions/actionCreators/authCheckActionCreators';
+import {userFetchActionCreator} from '../../actions/actionCreators/userActionCreators';
 
 class LoginContainer extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      user: {},
-      showSpinner: false,
-      url_request: 'http://10.0.75.1:3000/auth/vkontakte'
+
+      url_request: 'http://10.6.24.44:3000/auth/vkontakte'
     };
+  }
+
+  componentDidUpdate() {
+    const {isLogged, userId} = this.props;
+    const {navigate} = this.props.navigation;
+
+    isLogged && navigate('Main');
+    userId && this.props.getUser(userId);
   }
 
   handleGitHubLogin = async () => {
     const redirectUrl = await Linking.getInitialURL();
     const authUrl = this.state.url_request + `?redirectUrl=${redirectUrl}`;
-    this.setState({
-      authUrl: authUrl,
-      showSpinner: true
-    });
 
     try {
       const authResult = await WebBrowser.openAuthSessionAsync(authUrl, redirectUrl);
-      this.parseUrlToUser(authResult.url);
+      this.parseUrlToToken(authResult.url);
     } catch (err) {
       // eslint-disable-next-line
       console.log('ERROR:', err);
     }
   };
 
-  parseUrlToUser = (url) => {
-    const [, userString] = url.match(/user=([^#]+)/);
-    const decodedUser = JSON.parse(decodeURI(userString));
+  parseUrlToToken = (url) => {
+    const [, token] = url.match(/token=([^#]+)/);
 
-    this.setState({
-      user: decodedUser,
-      showSpinner: false
-    }, () => {
-      WebBrowser.dismissBrowser();
-      const {navigate} = this.props.navigation;
-      navigate('Main');
-    });
+    this.props.checkToken(token);
   };
 
   renderVkLabelAndIcon = () => (
     <View style={{flexDirection: 'row', flex: 1}}>
-      <Text style={styles.buttonLabel}>Login with </Text>
+      <Text style={styles.buttonLabel}>Login with</Text>
       <Ionicons name={'logo-vk'} style={styles.buttonIcon} />
     </View>
   );
@@ -64,9 +60,9 @@ class LoginContainer extends React.Component {
   render() {
     return (
       <View style={styles.loginContainer}>
-        <ButtonCustom
+        <Button
           onPressHandler={this.handleGitHubLogin}
-          style={{backgroundColor: '#5b88bd', alignItems: 'center', width: '80%', height: '8%'}}
+          style={styles.loginButton}
           render={this.renderVkLabelAndIcon} />
       </View>
     );
@@ -75,19 +71,26 @@ class LoginContainer extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
+    isLogged: state.auth.isLogged,
+    userId: state.auth.userId
   };
 };
 
 const mapActionsToProps = (dispatch) => (
   bindActionCreators({
-    fetchUserData: userFetchActionCreator
+    checkToken: authCheckActionCreator,
+    getUser: userFetchActionCreator
   }, dispatch)
 );
 
 LoginContainer.propTypes = {
   navigation: PropTypes.shape({
     navigate: PropTypes.func
-  })
+  }),
+  checkToken: PropTypes.func,
+  getUser: PropTypes.func,
+  isLogged: PropTypes.bool,
+  userId: PropTypes.string
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(LoginContainer);

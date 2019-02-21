@@ -1,10 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {View} from 'react-native';
 import InputWithLabel from '../../InputWithLabel';
 import styles from '../../MainTripCriteriaForm/styles';
 
 const withPriceAndSeatsCount = (WrappedComponent) => {
-  return class WithPriceAndSeatsCount extends React.Component {
+  class WithPriceAndSeatsCount extends React.Component {
     onTextChange = (field) => {
       return (text) => {
         this.props.onChangeText({
@@ -45,7 +46,17 @@ const withPriceAndSeatsCount = (WrappedComponent) => {
         </View>
       );
     }
-  };
+  }
+
+  WithPriceAndSeatsCount.propTypes = WithPriceAndSeatsCountPropTypes;
+
+  return WithPriceAndSeatsCount;
+};
+
+const WithPriceAndSeatsCountPropTypes = {
+  onChangeText: PropTypes.func,
+  price: PropTypes.number,
+  seatsCount: PropTypes.number
 };
 
 export default withPriceAndSeatsCount;

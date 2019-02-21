@@ -3,7 +3,10 @@ import {ScrollView, StyleSheet} from 'react-native';
 
 export default class LinksScreen extends React.Component {
   static navigationOptions = {
-    title: 'Links',
+    title: (options) => {
+      console.log('options', options);
+      return 'aaa';
+    },
   };
 
   render() {

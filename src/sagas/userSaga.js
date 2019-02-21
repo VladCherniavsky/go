@@ -1,14 +1,15 @@
-import {put, takeEvery} from 'redux-saga/effects';
+import {put, takeEvery, call} from 'redux-saga/effects';
 import {USER_FETCH} from '../actions';
 import {
   userFetchSuccessActionCreator,
   userFetchFailedActionCreator
 } from '../actions/actionCreators/userActionCreators';
+import {getUser} from '../apiCommunication/userApi';
 
 
-function* fetchUserData() {
+function* fetchUserData({payload}) {
   try {
-    const user = {name: 'Vlad'};
+    const user = yield call(getUser, payload);
     yield put(userFetchSuccessActionCreator(user));
   } catch (error) {
     yield put(userFetchFailedActionCreator(error.data));

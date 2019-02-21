@@ -1,7 +1,11 @@
 import React from 'react';
 import {Text} from 'react-native';
 
-export default class BaseClass extends React.Component {
+export default class BaseMainCriteria extends React.Component {
+  static navigationOptions = {
+    header: null,
+  };
+
   state = {
     departurePlace: null,
     arrivalPlace: null,

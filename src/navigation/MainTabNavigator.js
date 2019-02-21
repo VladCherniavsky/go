@@ -3,10 +3,10 @@ import {Platform} from 'react-native';
 import {createStackNavigator, createBottomTabNavigator} from 'react-navigation';
 import PropTypes from 'prop-types';
 
-import TabBarIcon from '../components/TabBarIcon';
+import TabBarIcon from '../components/TabBarIcon/TabBarIcon';
 import SearchContainer from '../containers/Search';
 import NewRideContainer from '../containers/NewRide';
-import LinksScreen from '../containers/LinksScreen';
+import ProfileContainer from '../containers/Profile';
 import SettingsScreen from '../containers/SettingsScreen';
 
 const SearchStack = createStackNavigator({
@@ -76,7 +76,7 @@ renderHistoryTabBarIcon.propTypes = {
 
 
 const ProfileStack = createStackNavigator({
-  Settings: SettingsScreen,
+  Profile: ProfileContainer,
 });
 
 const renderProfileabBarIcon = ({focused}) => (

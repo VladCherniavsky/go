@@ -1,1 +1,1 @@
-export { default} from './MainTripCriteriaForm';
+export {default} from './MainTripCriteriaForm';
